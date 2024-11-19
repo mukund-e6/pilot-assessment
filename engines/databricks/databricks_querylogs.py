@@ -13,13 +13,11 @@ os.makedirs(csv_output_dir, exist_ok=True)
 
 
 def extract_query_logs():
-# databricks connection details
     catalog = 'system'
     database = 'information_schema'
     Access_token = os.environ.get('DBR_ACCESS_TOKEN')
     warehouse_id = os.environ.get('DBR_WAREHOUSE_ID')
 
-    # databricks API details
     DBR_HOSTNAME = os.environ.get('DBR_HOST')
     API_URL = f"https://{DBR_HOSTNAME}/api/2.0/sql/history/queries"
 
@@ -79,17 +77,14 @@ def extract_query_logs():
             response = requests.get(API_URL, json=payload, headers=headers)
             response_data = response.json()
 
-            # Extract query history
             queries = response_data.get('res', [])
             query_history.extend(queries)
 
-            # Check if more pages are available
             has_more = response_data.get("has_more", False)
             next_page_token = response_data.get("next_page_token", None)
 
-            time.sleep(0.5)  # Slight delay to avoid hitting API limits
+            time.sleep(0.5)
 
-        # Save query history to CSV
         if query_history:
             save_query_history_to_csv(query_history, output_csv)
             logger.info(f"Query history exported to {output_csv}")
@@ -97,7 +92,6 @@ def extract_query_logs():
             logger.info(f"No queries found between {start_time} and {end_time}")
 
 
-    # Function to save query history into a CSV file
     def save_query_history_to_csv(query_history, output_csv):
         if not query_history:
             logger.info(f"No data to write in {output_csv}")
@@ -106,7 +100,6 @@ def extract_query_logs():
         with open(output_csv, mode='w', newline='') as file:
             writer = csv.writer(file)
 
-            # Write headers
             headers = [
                 "query_id",  # query.get("query_id")
                 "query_text",  # query.get("query")
@@ -140,7 +133,6 @@ def extract_query_logs():
 
             writer.writerow(headers)
 
-            # Write query data
             for query in query_history:
                 metrics = query.get("metrics", {})
                 writer.writerow([
@@ -176,14 +168,11 @@ def extract_query_logs():
                 ])
 
 
-    # Function to convert datetime to epoch time in milliseconds
     def to_epoch_ms(dt):
         return int(dt.timestamp() * 1000)
 
 
-    # Function to fetch and save query history between a date range
     def fetch_query_history_by_date(start_date_str, end_date_str, output_csv):
-        # Use datetime directly here, no need for datetime.datetime
         start_time = datetime.strptime(start_date_str, "%Y-%m-%d")
         end_time = datetime.strptime(end_date_str, "%Y-%m-%d") + timedelta(days=1) - timedelta(milliseconds=1)
         print(start_time)
@@ -193,7 +182,6 @@ def extract_query_logs():
 
         fetch_query_history(start_time_ms, end_time_ms, output_csv)
 
-    # Example usage
     start_date = os.environ.get('query_log_start')
     end_date = os.environ.get('query_log_end')
     output_csv = f"{csv_output_dir}/query_history_output.csv"
