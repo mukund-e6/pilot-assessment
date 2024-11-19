@@ -42,7 +42,6 @@ cd <PATH>/e6-migration-assessment
 ```
 Run the following export commands pertaining to your databricks configurations (host, access_token, warehouse_id, etc.)
 ```
-commandline
 export DBR_HOST="dbc-xxx-yyy"
 export DBR_WAREHOUSE_ID="8123456789"
 export DBR_ACCESS_TOKEN="dapi12345abcdef"
