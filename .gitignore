@@ -1,2 +1,3 @@
-/engines/Starburst/
-/engines/Redshift/
+/clients/Starburst/
+/clients/Redshift/
+/clients/mssql/

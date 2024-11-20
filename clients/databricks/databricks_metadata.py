@@ -85,4 +85,3 @@ def extract_metadata():
 
     except Exception as e:
         logger.error(f"Error extracting Databricks metadata: {str(e)}")
-
