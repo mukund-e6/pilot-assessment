@@ -15,7 +15,7 @@ os.makedirs(csv_output_dir, exist_ok=True)
 def extract_query_logs():
     catalog = 'system'
     database = 'information_schema'
-    Access_token = os.environ.get('DBR_ACCESS_TOKEN')
+    access_token = os.environ.get('DBR_ACCESS_TOKEN')
     warehouse_id = os.environ.get('DBR_WAREHOUSE_ID')
 
     DBR_HOSTNAME = os.environ.get('DBR_HOST')
@@ -25,7 +25,7 @@ def extract_query_logs():
         print('debug')
         return sql.connect(server_hostname=DBR_HOSTNAME,
                            http_path=f'/sql/1.0/warehouses/{warehouse_id}',
-                           access_token=Access_token,
+                           access_token=access_token,
                            schema=database,
                            catalog=catalog
                            )
@@ -54,7 +54,7 @@ def extract_query_logs():
 
     def fetch_query_history(start_time, end_time, output_csv):
         headers = {
-            "Authorization": f"Bearer {Access_token}"
+            "Authorization": f"Bearer {access_token}"
         }
         query_history = []
         has_more = True
@@ -101,34 +101,34 @@ def extract_query_logs():
             writer = csv.writer(file)
 
             headers = [
-                "query_id",  # query.get("query_id")
-                "query_text",  # query.get("query")
-                "user",  # query.get("user")
-                "start_time",  # query.get("start_time")
-                "end_time",  # query.get("end_time")
-                "state",  # query.get("state")
-                "total_time_ms",  # metrics.get("total_time_ms")
-                "read_bytes",  # metrics.get("read_bytes")
-                "rows_produced_count",  # metrics.get("rows_produced_count")
-                "compilation_time_ms",  # metrics.get("compilation_time_ms")
-                "execution_time_ms",  # metrics.get("execution_time_ms")
-                "read_remote_bytes",  # metrics.get("read_remote_bytes")
-                "write_remote_bytes",  # metrics.get("write_remote_bytes")
-                "read_cache_bytes",  # metrics.get("read_cache_bytes")
-                "spill_to_disk_bytes",  # metrics.get("spill_to_disk_bytes")
-                "task_total_time_ms",  # metrics.get("task_total_time_ms")
-                "read_files_count",  # metrics.get("read_files_count")
-                "read_partitions_count",  # metrics.get("read_partitions_count")
-                "photon_total_time_ms",  # metrics.get("photon_total_time_ms")
-                "rows_read_count",  # metrics.get("rows_read_count")
-                "result_fetch_time_ms",  # metrics.get("result_fetch_time_ms")
-                "network_sent_bytes",  # metrics.get("network_sent_bytes")
-                "result_from_cache",  # metrics.get("result_from_cache")
-                "pruned_bytes",  # metrics.get("pruned_bytes")
-                "pruned_files_count",  # metrics.get("pruned_files_count")
-                "provisioning_queue_start_timestamp",  # metrics.get("provisioning_queue_start_timestamp")
-                "overloading_queue_start_timestamp",  # metrics.get("overloading_queue_start_timestamp")
-                "query_compilation_start_timestamp"  # metrics.get("query_compilation_start_timestamp")
+                "query_id",
+                "query_text",
+                "user",
+                "start_time",
+                "end_time",
+                "state",
+                "total_time_ms",
+                "read_bytes",
+                "rows_produced_count",
+                "compilation_time_ms",
+                "execution_time_ms",
+                "read_remote_bytes",
+                "write_remote_bytes",
+                "read_cache_bytes",
+                "spill_to_disk_bytes",
+                "task_total_time_ms",
+                "read_files_count",
+                "read_partitions_count",
+                "photon_total_time_ms",
+                "rows_read_count",
+                "result_fetch_time_ms",
+                "network_sent_bytes",
+                "result_from_cache",
+                "pruned_bytes",
+                "pruned_files_count",
+                "provisioning_queue_start_timestamp",
+                "overloading_queue_start_timestamp",
+                "query_compilation_start_timestamp"
             ]
 
             writer.writerow(headers)
@@ -167,18 +167,11 @@ def extract_query_logs():
 
                 ])
 
-
-    def to_epoch_ms(dt):
-        return int(dt.timestamp() * 1000)
-
-
     def fetch_query_history_by_date(start_date_str, end_date_str, output_csv):
         start_time = datetime.strptime(start_date_str, "%Y-%m-%d")
         end_time = datetime.strptime(end_date_str, "%Y-%m-%d") + timedelta(days=1) - timedelta(milliseconds=1)
-        print(start_time)
-        print(end_time)
-        start_time_ms = to_epoch_ms(start_time)
-        end_time_ms = to_epoch_ms(end_time)
+        start_time_ms = int(start_time.timestamp() * 1000)
+        end_time_ms = int(end_time.timestamp() * 1000)
 
         fetch_query_history(start_time_ms, end_time_ms, output_csv)
 
