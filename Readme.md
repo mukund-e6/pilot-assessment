@@ -13,9 +13,10 @@ Pre Assessment Requirements:
 
 - Databricks Permission to view system.information_schema
 - Python 3.9 or above
-- Databricks SQL Python connector
+- Pandas, Databricks SQL Python connector
 ```
 ```
+pip install pandas
 pip install databricks-sql-connector
 ```
 #### Snowflake
@@ -25,9 +26,10 @@ Pre Assessment Requirements:
 - e6-migration-assessment tool for running the assessment
 - Snowflake role to view query history and information schema (ACCOUNT_ADMIN preferred)
 - Python 3.9 or above
-- Snowflake SQL Python connector
+- Pandas, Snowflake SQL Python connector
 ```
 ```
+pip install pandas
 pip install snowflake-connector-python
 ```
 

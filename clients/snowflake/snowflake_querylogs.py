@@ -32,7 +32,7 @@ def extract_query_logs():
             schema=schema
         )
         cursor = conn.cursor()
-        logger.info("Connected to snowflake.")
+        logger.info("Connected to snowflake")
         cursor.execute(f"USE ROLE {role};")
         logger.info(f"Using {role} for extracting query logs")
 
