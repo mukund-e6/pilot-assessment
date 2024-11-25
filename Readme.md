@@ -23,7 +23,7 @@ Set environment variables pertaining to your databricks configurations (host, ac
 
 
 > export DBR_HOST=<databricks_host> \
-> export DBR_WAREHOUSE_ID=<warehouse-id> \
+> export DBR_WAREHOUSE_ID=<warehouse_id> \
 > export DBR_ACCESS_TOKEN=<databrciks_token> \
 > export query_log_start='YYYY-MM-DD' (Example 2024-10-11) \
 > export query_log_end='YYYY-MM-DD' (Example 2024-10-15)
