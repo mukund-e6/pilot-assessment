@@ -35,9 +35,9 @@ To run the assessment script :
 #### Snowflake
 Pre Assessment Requirements:
 
-- Snowflake role to view query history and information schema (ACCOUNT_ADMIN preferred)
+- Starburst permissions to view query history
 - Python 3.9 or above
-- Pandas, Snowflake SQL Python connector
+- Pandas, Starburst SQL Python connector
 
 
 
@@ -46,7 +46,6 @@ Pre Assessment Requirements:
 
 
 Set environment variables pertaining to your snowflake configurations (host, warehouse, role, user, password, etc.)
-
 > export SNOWFLAKE_HOST=<snowflake_host> \
 > export SNOWFLAKE_WAREHOUSE=<warehouse_name> \
 > export SNOWFLAKE_ROLE='ACCOUNTADMIN' \
@@ -58,6 +57,37 @@ Set environment variables pertaining to your snowflake configurations (host, war
 To run the assessment script :
 
 > python3 client/main.py snowflake
+
+#### Starburst 
+Pre Assessment Requirements:
+
+- Snowflake role to view query history and information schema (ACCOUNT_ADMIN preferred)
+- Python 3.9 or above
+- Pandas, Snowflake SQL Python connector
+
+
+
+> pip install pandas \
+> pip install pystarburst
+
+
+Set environment variables pertaining to your starburst configurations (host, user, password, catalog, etc.) 
+
+> export STARBURST_HOST=<starburst_host> \
+> export STARBURST_PORT=<starburst_port> \
+> export STARBURST_USER=<starburst_username> \
+> export STARBURST_PASSWORD=<starburst_password> \
+> export STARBURST_CATALOG=<catalog_name> \
+> export STARBURST_SCHEMA=<schema_name> \
+> export QUERY_LOG_START='YYYY-MM-DD' \
+> export QUERY_LOG_END='YYYY-MM-DD' \
+> export COLUMN_STATS=true
+```
+Set `COLUMN_STATS=true` to extract both schema and column statistics, or `COLUMN_STATS=false` to extract only schema information.
+```
+To run the assessment script :
+
+> python3 client/main.py starburst
 
 
 Two directories named <client>-metadata for Metadata and <client>-query-logs for Query Logs will be generated with the help of above script.
