@@ -136,7 +136,7 @@ def extract_query_logs():
             for query in query_history:
                 query_text = query.get("query_text", "")
                 if "SELECT * FROM system.information_schema" in query_text:
-                    continue  # Skip this query
+                    continue
 
                 metrics = query.get("metrics", {})
                 writer.writerow([
