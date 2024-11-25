@@ -35,11 +35,9 @@ To run the assessment script :
 #### Snowflake
 Pre Assessment Requirements:
 
-- Starburst permissions to view query history
+- Snowflake role to view query history and information schema (ACCOUNT_ADMIN preferred)
 - Python 3.9 or above
-- Pandas, Starburst SQL Python connector
-
-
+- Pandas, Snowflake SQL Python connector
 
 > pip install pandas \
 > pip install snowflake-connector-python
@@ -61,10 +59,9 @@ To run the assessment script :
 #### Starburst 
 Pre Assessment Requirements:
 
-- Snowflake role to view query history and information schema (ACCOUNT_ADMIN preferred)
+- Starburst permissions to view query history
 - Python 3.9 or above
-- Pandas, Snowflake SQL Python connector
-
+- Pandas, Starburst SQL Python connector
 
 
 > pip install pandas \
