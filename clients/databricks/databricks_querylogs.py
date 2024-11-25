@@ -134,10 +134,14 @@ def extract_query_logs():
             writer.writerow(headers)
 
             for query in query_history:
+                query_text = query.get("query_text", "")
+                if "SELECT * FROM system.information_schema" in query_text:
+                    continue  # Skip this query
+
                 metrics = query.get("metrics", {})
                 writer.writerow([
                     query.get("query_id"),
-                    query.get("query"),
+                    query_text,
                     query.get("user"),
                     query.get("start_time"),
                     query.get("end_time"),
@@ -164,7 +168,6 @@ def extract_query_logs():
                     metrics.get("provisioning_queue_start_timestamp"),
                     metrics.get("overloading_queue_start_timestamp"),
                     metrics.get("query_compilation_start_timestamp")
-
                 ])
 
     def fetch_query_history_by_date(start_date_str, end_date_str, output_csv):
@@ -180,3 +183,6 @@ def extract_query_logs():
     output_csv = f"{csv_output_dir}/query_history_output.csv"
 
     fetch_query_history_by_date(start_date, end_date, output_csv)
+
+if __name__ == "__main__":
+    extract_query_logs()

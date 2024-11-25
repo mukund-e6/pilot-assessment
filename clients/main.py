@@ -43,12 +43,12 @@ def extractor(engine_type):
 
 
 if __name__ == "__main__":
-    logger.info("Parsing command-line arguments.")
     parser = argparse.ArgumentParser()
     parser.add_argument('engine_type', type=str)
 
     args = parser.parse_args()
-    logger.info(f"Starting extractor script with engine_type: {args.engine_type}")
+    logger.info(f"Starting extractor script with client: {args.engine_type}")
 
     extractor(args.engine_type)
     logger.info("Extractor script completed.")
+    # extractor('starburst')
