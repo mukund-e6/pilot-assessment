@@ -86,5 +86,32 @@ To run the assessment script :
 
 > python3 client/main.py starburst
 
+#### MSSQL Server
+Pre Assessment Requirements:
 
+- MSSQL server permission to view System tables and Information Schema
+- Python 3.9 or above
+- Pandas, MSSQL Python connector
+
+
+> pip install pandas \
+> pip install pymssql
+
+
+Set environment variables pertaining to your MSSQL server configurations (server, user, password, catalog, etc.) 
+
+> export MSSQL_SERVER=<mssql_server> \
+> export MSSQL_PORT=<mssql_port> \
+> export MSSQL_USER=<mssql_username> \
+> export MSSQL_PASSWORD=<mssql_password> \
+> export MSSQL_DATABASE=<mssql_database> \
+> export QUERY_LOG_START='YYYY-MM-DD' \
+> export QUERY_LOG_END='YYYY-MM-DD'
+
+To run the assessment script :
+
+> python3 client/main.py mssql
+>
+```
 Two directories named <client>-metadata for Metadata and <client>-query-logs for Query Logs will be generated with the help of above script.
+```
