@@ -51,4 +51,3 @@ if __name__ == "__main__":
 
     extractor(args.engine_type)
     logger.info("Extractor script completed.")
-    # extractor('starburst')
