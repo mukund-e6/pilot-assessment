@@ -16,8 +16,8 @@ def run_query_and_save_to_csv(cursor, query, csv_filename, csv_output_dir):
 
         df = pd.DataFrame(result, columns=columns)
 
-        output_path = os.path.join(csv_output_dir, f'{csv_filename}.csv')
-        df.to_csv(output_path, index=False)
+        output_path = os.path.join(csv_output_dir, f'{csv_filename}.parquet')
+        df.to_parquet(output_path, index=False)
         logger.info(f"Data written to {csv_filename}")
     except Exception as e:
         logger.error(f"Failed to execute query for {csv_filename}: {e}")

@@ -64,11 +64,10 @@ def extract_query_logs():
             df = pd.DataFrame(result, columns=columns)
 
             df['date'] = pd.to_datetime(df['END_TIME']).dt.date
-
             logger.info(f"Writing query history into csv...")
             for date, group in df.groupby('date'):
-                csv_filename = f"{csv_output_dir}/query_history_{date}.csv"
-                group.drop(columns=['date']).to_csv(csv_filename, index=False)
+                csv_filename = f"{csv_output_dir}/query_history_{date}.parquet"
+                group.drop(columns=['date']).to_parquet(csv_filename, index=False)
                 logger.info(f"Data for {date} has been exported to {os.path.basename(csv_filename)}")
 
             logger.info(f"Query Log Successfully Exported to {csv_output_dir}")

@@ -10,6 +10,7 @@ logger = logging.getLogger()
 csv_output_dir = 'databricks-metadata'
 os.makedirs(csv_output_dir, exist_ok=True)
 
+
 def extract_metadata():
     catalog = 'system'
     database = 'information_schema'
@@ -62,23 +63,23 @@ def extract_metadata():
 
         logger.info("Connected to Databricks.")
 
-        def run_query_and_save_to_csv(query, csv_filename):
+        def run_query_and_save_to_csv(query, parquet_filename):
             try:
-                logger.info(f"Executing query for {csv_filename} metadata")
+                logger.info(f"Executing query for {parquet_filename} metadata")
                 with conn.cursor() as cursor:
                     cursor.execute(query)
                     result = cursor.fetchall()
                     columns = [desc[0] for desc in cursor.description]
 
                 result_df = pd.DataFrame(result, columns=columns)
-                output_path = os.path.join(csv_output_dir, f'{csv_filename}.csv')
-                result_df.to_csv(output_path, index=False)
-                logger.info(f"Data written to {csv_filename}")
+                output_path = os.path.join(csv_output_dir, f'{parquet_filename}.parquet')
+                result_df.to_parquet(output_path, index=False)
+                logger.info(f"Data written to {parquet_filename}")
             except Exception as e:
-                logger.error(f"Failed to execute query for {csv_filename}: {e}")
+                logger.error(f"Failed to execute query for {parquet_filename}: {e}")
 
-        for csv_filename, query in queries.items():
-            run_query_and_save_to_csv(query, csv_filename)
+        for parquet_filename, query in queries.items():
+            run_query_and_save_to_csv(query, parquet_filename)
 
         conn.close()
         logger.info("Databricks metadata extraction completed.")
