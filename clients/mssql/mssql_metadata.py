@@ -6,9 +6,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def run_query_and_save_to_csv(cursor, query, csv_filename, csv_output_dir):
+def run_query_and_save_to_parquet(cursor, query, parquet_filename, parquet_output_dir):
     try:
-        logger.info(f"Executing query for {csv_filename} metadata")
+        logger.info(f"Executing query for {parquet_filename} metadata")
         cursor.execute(query)
         result = cursor.fetchall()
 
@@ -16,11 +16,11 @@ def run_query_and_save_to_csv(cursor, query, csv_filename, csv_output_dir):
 
         df = pd.DataFrame(result, columns=columns)
 
-        output_path = os.path.join(csv_output_dir, f'{csv_filename}.csv')
-        df.to_csv(output_path, index=False)
-        logger.info(f"Data written to {csv_filename}")
+        output_path = os.path.join(parquet_output_dir, f'{parquet_filename}.parquet')
+        df.to_parquet(output_path, index=False)
+        logger.info(f"Data written to {parquet_filename}")
     except Exception as e:
-        logger.error(f"Failed to execute query for {csv_filename}: {e}")
+        logger.error(f"Failed to execute query for {parquet_filename}: {e}")
 
 
 def extract_metadata():
@@ -29,8 +29,8 @@ def extract_metadata():
     user = os.environ.get('MSSQL_USER')
     password = os.environ.get('MSSQL_PASSWORD')
     database = os.environ.get('MSSQL_DATABASE')
-    csv_output_dir = 'mssql-metadata'
-    os.makedirs(csv_output_dir, exist_ok=True)
+    parquet_output_dir = 'mssql-metadata'
+    os.makedirs(parquet_output_dir, exist_ok=True)
     logger.info("Connecting to MSSQL Server...")
     try:
         conn = pymssql.connect(
@@ -76,9 +76,9 @@ def extract_metadata():
                             
                             EXEC sp_executesql @sql;""",
         }
-        for csv_filename, query in queries.items():
+        for parquet_filename, query in queries.items():
 
-            run_query_and_save_to_csv(cursor, query, csv_filename, csv_output_dir)
+            run_query_and_save_to_parquet(cursor, query, parquet_filename, parquet_output_dir)
         cursor.close()
         conn.close()
         logger.info("Connection Closed")

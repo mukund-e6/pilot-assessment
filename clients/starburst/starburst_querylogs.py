@@ -23,8 +23,8 @@ def extract_query_logs():
     query_log_start = os.environ.get('QUERY_LOG_START')
     query_log_end = os.environ.get('QUERY_LOG_END')
 
-    csv_output_dir = 'starburst-query-logs'
-    os.makedirs(csv_output_dir, exist_ok=True)
+    parquet_output_dir = 'starburst-query-logs'
+    os.makedirs(parquet_output_dir, exist_ok=True)
 
     db_parameters = {
         "host": host,
@@ -53,17 +53,16 @@ def extract_query_logs():
         result = session.sql(history_query).collect()
         df = pd.DataFrame(result)
 
-        if df.empty:
-            logger.info(f"No queries were found between {query_log_start} and {query_log_end}.")
-        else:
-            df['date'] = pd.to_datetime(df['date']).dt.date
-            logger.info(f"Writing query history into csv...")
-            for query_date, group in df.groupby('date'):
-                csv_filename = f"{csv_output_dir}/query_history_{query_date}.csv"
-                group.to_csv(csv_filename, index=False)
-                logger.info(f"Data for {query_date} has been exported to {os.path.basename(csv_filename)}")
+        if not df.empty:
 
-            logger.info(f"Query Log Successfully Exported to {csv_output_dir}")
+            if 'session_properties' in df.columns:
+                df['session_properties'] = df['session_properties'].astype(str)
+
+            for query_date, group in df.groupby('date'):
+                parquet_filename = f"{parquet_output_dir}/query_history_{query_date}.parquet"
+                group.drop(columns=['date'], errors='ignore').to_parquet(parquet_filename, index=False)
+                logger.info(f"Data for {query_date} has been exported to {os.path.basename(parquet_filename)}")
+            logger.info(f"Query Log Successfully Exported to {parquet_output_dir}")
         session.close()
 
     except Exception as e:
