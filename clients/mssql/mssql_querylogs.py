@@ -51,9 +51,9 @@ def extract_query_logs():
             df['creation_date'] = pd.to_datetime(df['creation_time']).dt.date
             logger.info(f"Writing query history into csv...")
             for date, group in df.groupby('creation_date'):
-                csv_filename = f"{csv_output_dir}/query_history_{date}.csv"
-                group.to_csv(csv_filename, index=False)
-                logger.info(f"Data for {date} has been exported to {os.path.basename(csv_filename)}")
+                parquet_filename = f"{csv_output_dir}/query_history_{date}.parquet"
+                group.to_parquet(parquet_filename, index=False)
+                logger.info(f"Data for {date} has been exported to {os.path.basename(parquet_filename)}")
 
             logger.info(f"Query Log Successfully Exported to {csv_output_dir}")
         cursor.close()
