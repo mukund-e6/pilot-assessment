@@ -29,7 +29,7 @@ Set environment variables pertaining to your databricks configurations (host, ac
 > export query_log_end='YYYY-MM-DD' (Example 2024-10-15)
 
 To run the assessment script :
-> python3 client/main.py databricks
+> python3 clients/main.py databricks
 
 
 #### Snowflake
@@ -54,7 +54,7 @@ Set environment variables pertaining to your snowflake configurations (host, war
 
 To run the assessment script :
 
-> python3 client/main.py snowflake
+> python3 clients/main.py snowflake
 
 #### Starburst 
 Pre Assessment Requirements:
@@ -84,7 +84,7 @@ Set `COLUMN_STATS=true` to extract both schema and column statistics, or `COLUMN
 ```
 To run the assessment script :
 
-> python3 client/main.py starburst
+> python3 clients/main.py starburst
 
 #### MSSQL Server
 Pre Assessment Requirements:
@@ -110,7 +110,7 @@ Set environment variables pertaining to your MSSQL server configurations (server
 
 To run the assessment script :
 
-> python3 client/main.py mssql
+> python3 clients/main.py mssql
 >
 ```
 Two directories named <client>-metadata for Metadata and <client>-query-logs for Query Logs will be generated with the help of above script.
