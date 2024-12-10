@@ -53,16 +53,18 @@ def extract_query_logs():
         result = session.sql(history_query).collect()
         df = pd.DataFrame(result)
 
-        if not df.empty:
+        if df.empty:
+            logger.info(f"No queries were found between {query_log_start} and {query_log_end}.")
+        else:
+            df['session_properties'] = df['session_properties'].astype(str)
+            df['create_time'] = df['create_time'].astype(str)
+            df['execution_start_time'] = df['execution_start_time'].astype(str)
+            df['end_time'] = df['end_time'].astype(str)
 
-            if 'session_properties' in df.columns:
-                df['session_properties'] = df['session_properties'].astype(str)
-
-            for query_date, group in df.groupby('date'):
-                parquet_filename = f"{parquet_output_dir}/query_history_{query_date}.parquet"
-                group.drop(columns=['date'], errors='ignore').to_parquet(parquet_filename, index=False)
-                logger.info(f"Data for {query_date} has been exported to {os.path.basename(parquet_filename)}")
-            logger.info(f"Query Log Successfully Exported to {parquet_output_dir}")
+            parquet_filename = f"{parquet_output_dir}/query_history_starburst_1.parquet"
+            df.to_parquet(parquet_filename, index=False)
+            logger.info(f"Data has been exported to {os.path.basename(parquet_filename)}")
+        logger.info(f"Query Log Successfully Exported to {parquet_output_dir}")
         session.close()
 
     except Exception as e:

@@ -48,12 +48,10 @@ def extract_query_logs():
         if df.empty:
             logger.info(f"No queries were found between {query_log_start} and {query_log_end}.")
         else:
-            df['creation_date'] = pd.to_datetime(df['creation_time']).dt.date
             logger.info(f"Writing query history into csv...")
-            for date, group in df.groupby('creation_date'):
-                parquet_filename = f"{csv_output_dir}/query_history_{date}.parquet"
-                group.to_parquet(parquet_filename, index=False)
-                logger.info(f"Data for {date} has been exported to {os.path.basename(parquet_filename)}")
+            parquet_filename = f"{csv_output_dir}/query_history_mssql.parquet"
+            df.to_parquet(parquet_filename, index=False)
+            logger.info(f"Data has been exported to {os.path.basename(parquet_filename)}")
 
             logger.info(f"Query Log Successfully Exported to {csv_output_dir}")
         cursor.close()
