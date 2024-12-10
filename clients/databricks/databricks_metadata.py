@@ -72,6 +72,9 @@ def extract_metadata():
                     columns = [desc[0] for desc in cursor.description]
 
                 result_df = pd.DataFrame(result, columns=columns)
+                if query == 'tables':
+                    result_df['created']=result_df['created'].astype(str)
+                    result_df['last_altered'] = result_df['last_altered'].astype(str)
                 output_path = os.path.join(csv_output_dir, f'{parquet_filename}.parquet')
                 result_df.to_parquet(output_path, index=False)
                 logger.info(f"Data written to {parquet_filename}")
